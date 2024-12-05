@@ -1,3 +1,5 @@
+import MeetingPage from "@/components/MeetingPage";
+
 interface PageProps {
   params: { meetingId: string };
 }
@@ -9,5 +11,5 @@ export const generateMetadata = ({ params: { meetingId } }: PageProps) => {
 };
 
 export default function SingeMeetingPage({ params: { meetingId } }: PageProps) {
-  return <div>page</div>;
+  return <MeetingPage id={meetingId} />;
 }
