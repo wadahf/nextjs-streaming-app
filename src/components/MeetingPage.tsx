@@ -1,43 +1,43 @@
 "use client";
-import {
-  Call,
-  CallControls,
-  SpeakerLayout,
-  StreamCall,
-  StreamTheme,
-  useStreamVideoClient,
-} from "@stream-io/video-react-sdk";
+import useLocalCall from "@/hooks/useLocalCall";
+import { useUser } from "@clerk/nextjs";
+import { StreamCall, StreamTheme } from "@stream-io/video-react-sdk";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import MeetingScreen from "./MeetingScreen";
 
 interface MeetingPageProps {
   id: string;
 }
 
 export default function MeetingPage({ id }: MeetingPageProps) {
-  const [call, setCall] = useState<Call>();
+  const { call, isCallLoading } = useLocalCall(id);
 
-  const client = useStreamVideoClient();
+  const { user, isLoaded: isUserLoaded } = useUser();
 
-  if (!client) {
+  if (!isUserLoaded || isCallLoading) {
     return <Loader2 className="mx-auto animate-spin" />;
   }
 
-  const handleJoinMeeting = async () => {
-    const call = client.call("default", id);
-    await call.join();
-    setCall(call);
-  };
-
   if (!call) {
-    return <button onClick={handleJoinMeeting}>Join Meeting</button>;
+    return <p className="text-center font-bold">call not found</p>;
+  }
+
+  const notAllowedToJoinCall =
+    call.type === "private-meeting" &&
+    (!user || call.state.members.find((member) => member.user.id !== user.id));
+
+  if (notAllowedToJoinCall) {
+    return (
+      <p className="text-center font-bold">
+        You are not invited to this meeting
+      </p>
+    );
   }
 
   return (
     <StreamCall call={call}>
       <StreamTheme>
-        <SpeakerLayout />
-        <CallControls />
+        <MeetingScreen />
       </StreamTheme>
     </StreamCall>
   );

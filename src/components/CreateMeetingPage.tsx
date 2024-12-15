@@ -1,8 +1,16 @@
 "use client";
+import { getUsersByIds } from "@/utils/actions";
 import { useUser } from "@clerk/nextjs";
-import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
-import { Loader2 } from "lucide-react";
+import {
+  Call,
+  MemberRequest,
+  useStreamVideoClient,
+} from "@stream-io/video-react-sdk";
+import { Copy, CopyCheck, Loader2 } from "lucide-react";
 import { useState } from "react";
+import Button from "./Button";
+import Link from "next/link";
+import { getMailToLink } from "@/utils/helpers";
 
 export default function CreateMeetingPage() {
   const { user } = useUser();
@@ -17,28 +25,51 @@ export default function CreateMeetingPage() {
     return <Loader2 className="mx-auto animate-spin" />;
   }
 
-  const createMeeting = async () => {
+  const handleCreateMeeting = async () => {
     // if(!client || !user) return;
 
     try {
       const id = crypto.randomUUID();
-      const call = client.call("default", id);
+
+      const callType = participants ? "private-meeting" : "default";
+      const call = client.call(callType, id);
+
+      const memberEmails = participants
+        ?.split(",")
+        .map((email) => email.trim());
+      const memberIds = await getUsersByIds(memberEmails);
+
+      const members: MemberRequest[] = memberIds
+        .map((id) => ({
+          user_id: id,
+          role: "call_member",
+        }))
+        .concat({ user_id: user.id, role: "call_member" })
+        .filter(
+          (value, index, arr) =>
+            arr.findIndex((value2) => value2.user_id === value.user_id) ===
+            index,
+        );
+
+      const startAt = new Date(startTime || Date.now()).toISOString();
 
       await call.getOrCreate({
         data: {
+          members,
+          starts_at: startAt,
           custom: { description },
         },
       });
 
       setCall(call);
     } catch (error) {
-      console.log(error);
+      console.log("error: :", error);
       alert("Something went wrong");
     }
   };
 
   return (
-    <div className="itemscen flex flex-col space-y-6">
+    <div className="flex flex-col items-center space-y-6">
       <h1 className="text-center text-2xl font-bold">
         Welcome {user?.username}
       </h1>
@@ -47,11 +78,11 @@ export default function CreateMeetingPage() {
         <DescriptionInput value={description} onChange={setDescription} />
         <StartTimeInput value={startTime} onChange={setStartTime} />
         <Participants value={participants} onChange={setParticipants} />
-        <button type="button" className="w-full" onClick={createMeeting}>
+        <Button type="button" className="w-full" onClick={handleCreateMeeting}>
           Create Meeting
-        </button>
-        {call && <MeetingLink call={call} />}
+        </Button>
       </div>
+      {call && <MeetingLink call={call} />}
     </div>
   );
 }
@@ -200,6 +231,41 @@ interface MeetingLinkProps {
 
 const MeetingLink = ({ call }: MeetingLinkProps) => {
   const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${call.id}`;
+  const [buttonIcon, setButtonIcon] = useState<JSX.Element>(<Copy />);
 
-  return <div className="text-center">{meetingLink}</div>;
+  const handleCopy = () => {
+    navigator.clipboard.writeText(meetingLink);
+    setButtonIcon(<CopyCheck className="text-green-700 transition-colors" />);
+    setTimeout(() => {
+      setButtonIcon(<Copy />);
+    }, 2000);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-3 text-center">
+      <div className="flex items-center gap-3">
+        <span>
+          Invitation link:{" "}
+          <Link href={meetingLink} className="font-medium">
+            {meetingLink}
+          </Link>
+        </span>
+
+        <button type="button" onClick={handleCopy} title="Copy invitaion link">
+          {buttonIcon}
+        </button>
+      </div>
+      <a
+        href={getMailToLink(
+          meetingLink,
+          call.state.startsAt,
+          call.state.custom.description,
+        )}
+        target="_blank"
+        className="text-blue-500 hover:underline"
+      >
+        Send email invitaion
+      </a>
+    </div>
+  );
 };
