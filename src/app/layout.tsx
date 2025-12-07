@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import Navbar from "@/components/Navbar";
 import ClientProvider from "./ClientProvider";
+import Navbar from "@/components/Navbar";
+import localFont from "next/font/local";
+import type { Metadata } from "next";
 import "./globals.css";
+import { Navigation } from "@/components";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,11 +32,17 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" data-theme="night">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
         >
           <ClientProvider>
-            <Navbar />
-            <main className="mx-auto max-w-5xl px-3 py-6">{children}</main>
+            {/* <Navbar /> */}
+            <Navigation />
+            {/* <main className="mx-auto max-w-5xl px-3 py-6">{children}</main> */}
+            {/* <main>{children}</main> */}
+            {/* <main className="mx-auto min-h-screen max-w-5xl bg-background"> */}
+            <main className="mx-auto min-h-screen max-w-7xl bg-background">
+              {children}
+            </main>
           </ClientProvider>
         </body>
       </html>
