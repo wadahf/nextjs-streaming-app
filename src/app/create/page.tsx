@@ -1,8 +1,7 @@
 "use client";
-import { Link as LinkIcon, Loader2 } from "lucide-react";
 import { getUsersByIds } from "@/utils/actions";
-import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import {
   Call,
@@ -21,10 +20,8 @@ import {
   MeetingLink,
   Participants,
 } from "@/components";
-// import { useToast } from "@/hooks/use-toast";
 
 const page = () => {
-  /* to be removed start */
   const { user } = useUser();
   const client = useStreamVideoClient();
 
@@ -78,47 +75,10 @@ const page = () => {
     }
   };
 
-  /* to be removed end */
-
-  const router = useRouter();
-  //   const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    title: "",
-    date: "",
-    time: "",
-    duration: "",
-    description: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // toast({
-    //   title: "Meeting Created!",
-    //   description: "Your meeting has been scheduled successfully.",
-    // });
-
-    setTimeout(() => {
-      router.push("/meetings");
-    }, 1500);
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   return (
     <div>
-      {/* <Navigation /> */}
-
       <main className="container px-4 py-12">
         <div className="mx-auto max-w-2xl">
-          {/* <div className="mx-auto"> */}
           <div className="mb-8">
             <h1 className="mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-4xl font-bold text-transparent">
               Create New Meeting
@@ -154,22 +114,7 @@ const page = () => {
             </CardContent>
           </Card>
         </div>
-        {call && (
-          <Card className="mx-auto mt-6 max-w-fit border-accent/20 bg-accent/5">
-            <CardContent className="pt-6">
-              <div className="flex items-start gap-3">
-                <div className="rounded-lg bg-accent/10 p-2">
-                  <LinkIcon className="h-5 w-5 text-accent" />
-                </div>
-
-                <div>
-                  <h3 className="mb-1 font-semibold">Invitation link</h3>
-                  <MeetingLink call={call} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        {call && <MeetingLink call={call} />}
       </main>
     </div>
   );

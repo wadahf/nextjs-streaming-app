@@ -1,4 +1,6 @@
 import { Calendar, Clock, Users, Video } from "lucide-react";
+import { Call } from "@stream-io/video-react-sdk";
+import Link from "next/link";
 import {
   Badge,
   Button,
@@ -7,8 +9,6 @@ import {
   CardDescription,
   CardHeader,
 } from "../";
-import Link from "next/link";
-import { Call } from "@stream-io/video-react-sdk";
 
 interface MeetingItemProps {
   meeting: Call;
