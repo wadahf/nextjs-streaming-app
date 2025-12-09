@@ -1,10 +1,10 @@
 "use client";
-import { getMailToLink } from "@/utils/helpers";
-import { Call } from "@stream-io/video-react-sdk";
 import { Copy, CopyCheck, LinkIcon } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
+import { Call } from "@stream-io/video-react-sdk";
 import { Card, CardContent } from "@/components";
+import { getMailToLink } from "@/utils/helpers";
+import { useState } from "react";
+import Link from "next/link";
 
 interface MeetingLinkProps {
   call: Call;

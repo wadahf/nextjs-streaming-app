@@ -21,7 +21,7 @@ import {
   Participants,
 } from "@/components";
 
-const page = () => {
+const CreateMeetingPage = () => {
   const { user } = useUser();
   const client = useStreamVideoClient();
 
@@ -120,4 +120,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default CreateMeetingPage;

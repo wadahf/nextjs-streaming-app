@@ -1,7 +1,7 @@
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import ClientProvider from "./ClientProvider";
-import Navbar from "@/components/Navbar";
+// import Navbar from "@/components/Navbar";
 import localFont from "next/font/local";
 import type { Metadata } from "next";
 import "./globals.css";

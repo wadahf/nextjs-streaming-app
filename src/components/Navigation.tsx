@@ -1,13 +1,7 @@
 "use client";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-  SignUpButton,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Video, Calendar, Plus } from "lucide-react";
-import { Button } from "./";
+import { Button } from "@/components";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

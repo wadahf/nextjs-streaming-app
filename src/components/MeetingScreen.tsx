@@ -1,5 +1,5 @@
 "use client";
-import { SpeakerLayout, useCallStateHooks } from "@stream-io/video-react-sdk";
+import { useCallStateHooks } from "@stream-io/video-react-sdk";
 import EndedMeetingScreen from "./EndedMeetingScreen";
 import UpcomingMeetingScreen from "./UpcomingMeetingScreen";
 import { useState } from "react";

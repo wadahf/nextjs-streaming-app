@@ -1,15 +1,14 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import { getToken } from "@/utils/actions";
 import { useUser } from "@clerk/nextjs";
+import { Loader2 } from "lucide-react";
+import { nanoid } from "nanoid";
 import {
   StreamVideo,
   StreamVideoClient,
   User,
 } from "@stream-io/video-react-sdk";
-import { Loader2 } from "lucide-react";
-import { nanoid } from "nanoid";
-import { useEffect, useState } from "react";
 
 interface ClientProviderProps {
   children: React.ReactNode;

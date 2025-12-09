@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Input, Label, Textarea } from "./";
+import { Label, Textarea } from "./";
 
 interface DescriptionInputProps {
   value: string;
@@ -24,19 +24,6 @@ const DescriptionInput = ({ value, onChange }: DescriptionInputProps) => {
         />
         Add description
       </label>
-      {/* {isChecked && (
-        <label className="block space-y-1">
-          <span className="font-medium">Description</span>
-
-          <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            maxLength={500}
-            className="w-full rounded-md border border-gray-300 p-2"
-          />
-        </label>
-      )} */}
-      {/* new description */}
 
       {isChecked && (
         <div className="space-y-2">

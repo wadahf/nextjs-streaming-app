@@ -43,16 +43,6 @@ const StartTimeInput = ({ value, onChange }: StartTimeInputProps) => {
       </label>
       {isActive && (
         <label className="block space-y-1">
-          {/* <span className="font-medium">Start Time</span>
-          <input
-            type="datetime-local"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            min={dateTimeLocalNow}
-            className="w-full rounded-md border border-gray-300 p-2"
-          /> */}
-
-          {/* new */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="date">Start Time</Label>

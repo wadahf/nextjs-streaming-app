@@ -32,18 +32,7 @@ const Participants = ({ value, onChange }: ParticipantsProps) => {
         />
         Private Meeting
       </label>
-      {/* {isActive && (
-        <label className="block space-y-1">
-          <span className="font-medium">Participant Emails</span>
 
-          <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-md border border-gray-300 p-2"
-            placeholder="Enter participant emails seperated by commas"
-          />
-        </label>
-      )} */}
       {isActive && (
         <div className="space-y-2">
           <Label htmlFor="description">Participant Emails</Label>

@@ -28,6 +28,7 @@ const MeetingsList = ({ calls, filterFn, title }: MeetingsListProps) => {
 
           return (
             <MeetingItem
+              key={call.id}
               meeting={call}
               href={meetingLink}
               state={meetingState}

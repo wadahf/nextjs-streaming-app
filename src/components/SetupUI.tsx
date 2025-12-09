@@ -1,14 +1,14 @@
 "use client";
+import AudioVolumeIndicator from "./AudioVolumeIndicator";
+import PermissionPrompt from "./PermissionPrompt";
 import useStreamCall from "@/hooks/useStreamCall";
+import { useEffect, useState } from "react";
+import { Button } from "@/components";
 import {
   DeviceSettings,
   useCallStateHooks,
   VideoPreview,
 } from "@stream-io/video-react-sdk";
-import PermissionPrompt from "./PermissionPrompt";
-import { useEffect, useState } from "react";
-import Button from "./Button";
-import AudioVolumeIndicator from "./AudioVolumeIndicator";
 
 interface SetupUIProps {
   onSetupComplete: () => void;
