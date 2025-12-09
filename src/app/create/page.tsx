@@ -1,38 +1,26 @@
 "use client";
-import { useState } from "react";
-import {
-  Calendar,
-  Clock,
-  Users,
-  Link as LinkIcon,
-  CopyCheck,
-  Copy,
-  Loader2,
-} from "lucide-react";
-// import { Textarea } from "@/components/ui/textarea";
-import {
-  Button,
-  Navigation,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  Input,
-  Label,
-  Textarea,
-} from "@/components";
+import { Link as LinkIcon, Loader2 } from "lucide-react";
+import { getUsersByIds } from "@/utils/actions";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { getMailToLink } from "@/utils/helpers";
 import { useUser } from "@clerk/nextjs";
+import { useState } from "react";
 import {
   Call,
   MemberRequest,
   useStreamVideoClient,
 } from "@stream-io/video-react-sdk";
-import { getUsersByIds } from "@/utils/actions";
-
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  DescriptionInput,
+  StartTimeInput,
+  MeetingLink,
+  Participants,
+} from "@/components";
 // import { useToast } from "@/hooks/use-toast";
 
 const page = () => {
@@ -50,8 +38,6 @@ const page = () => {
   }
 
   const handleCreateMeeting = async () => {
-    // if(!client || !user) return;
-
     try {
       const id = crypto.randomUUID();
 
@@ -127,7 +113,7 @@ const page = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div>
       {/* <Navigation /> */}
 
       <main className="container px-4 py-12">
@@ -190,185 +176,3 @@ const page = () => {
 };
 
 export default page;
-
-interface DescriptionInputProps {
-  value: string;
-  onChange: (value: string) => void;
-}
-
-const DescriptionInput = ({ value, onChange }: DescriptionInputProps) => {
-  const [isChecked, setIsChecked] = useState(false);
-
-  return (
-    <div className="space-y-2">
-      <div className="font-medium">Meeting info:</div>
-      <label className="flex items-center gap-1.5">
-        <input
-          type="checkbox"
-          checked={isChecked}
-          onChange={(e) => {
-            setIsChecked(e.target.checked);
-            onChange("");
-          }}
-        />
-        Add description
-      </label>
-      {isChecked && (
-        <label className="block space-y-1">
-          <span className="font-medium">Description</span>
-
-          <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            maxLength={500}
-            className="w-full rounded-md border border-gray-300 p-2"
-          />
-        </label>
-      )}
-    </div>
-  );
-};
-
-interface StartTimeInputProps {
-  value: string;
-  onChange: (value: string) => void;
-}
-
-const StartTimeInput = ({ value, onChange }: StartTimeInputProps) => {
-  const [isActive, setIsActive] = useState(false);
-  const dateTimeLocalNow = new Date(
-    new Date().getTime() - new Date().getTimezoneOffset() * 60_000,
-  )
-    .toISOString()
-    .slice(0, 16);
-
-  return (
-    <div className="space-y-2">
-      <div className="font-medium">Meeting Start:</div>
-      <label className="flex items-center gap-1.5">
-        <input
-          type="radio"
-          checked={!isActive}
-          onChange={() => {
-            setIsActive(false);
-            onChange("");
-          }}
-        />
-        Start Meeting Now
-      </label>
-      <label className="flex items-center gap-1.5">
-        <input
-          type="radio"
-          checked={isActive}
-          onChange={() => {
-            setIsActive(true);
-            onChange(dateTimeLocalNow);
-          }}
-        />
-        Start Meeting At Specific Time
-      </label>
-      {isActive && (
-        <label className="block space-y-1">
-          <span className="font-medium">Start Time</span>
-          <input
-            type="datetime-local"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            min={dateTimeLocalNow}
-            className="w-full rounded-md border border-gray-300 p-2"
-          />
-        </label>
-      )}
-    </div>
-  );
-};
-
-interface ParticipantsProps {
-  value: string;
-  onChange: (value: string) => void;
-}
-
-const Participants = ({ value, onChange }: ParticipantsProps) => {
-  const [isActive, setIsActive] = useState(false);
-
-  return (
-    <div className="space-y-2">
-      <div className="font-medium">Participants:</div>
-      <label className="flex items-center gap-1.5">
-        <input
-          type="radio"
-          checked={!isActive}
-          onChange={() => {
-            setIsActive(false);
-            onChange("");
-          }}
-        />
-        Everyone With Link Can Join
-      </label>
-      <label className="flex items-center gap-1.5">
-        <input
-          type="radio"
-          checked={isActive}
-          onChange={() => setIsActive(true)}
-        />
-        Private Meeting
-      </label>
-      {isActive && (
-        <label className="block space-y-1">
-          <span className="font-medium">Participant Emails</span>
-
-          <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-md border border-gray-300 p-2"
-            placeholder="Enter participant emails seperated by commas"
-          />
-        </label>
-      )}
-    </div>
-  );
-};
-
-interface MeetingLinkProps {
-  call: Call;
-}
-
-const MeetingLink = ({ call }: MeetingLinkProps) => {
-  const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${call.id}`;
-  const [buttonIcon, setButtonIcon] = useState<JSX.Element>(<Copy />);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(meetingLink);
-    setButtonIcon(<CopyCheck className="text-green-700 transition-colors" />);
-    setTimeout(() => {
-      setButtonIcon(<Copy />);
-    }, 2000);
-  };
-
-  return (
-    <div className="flex flex-col items-center gap-3 text-center">
-      <div className="flex items-center gap-3">
-        <span>
-          <Link href={meetingLink} className="font-medium">
-            {meetingLink}
-          </Link>
-        </span>
-
-        <button type="button" onClick={handleCopy} title="Copy invitaion link">
-          {buttonIcon}
-        </button>
-      </div>
-      <a
-        href={getMailToLink(
-          meetingLink,
-          call.state.startsAt,
-          call.state.custom.description,
-        )}
-        target="_blank"
-        className="text-blue-500 hover:underline"
-      >
-        Send email invitaion
-      </a>
-    </div>
-  );
-};

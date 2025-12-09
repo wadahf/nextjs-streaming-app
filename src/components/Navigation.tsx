@@ -17,7 +17,8 @@ const Navigation = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-sm">
+    // <nav className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-sm">
+    <nav className="border-b border-border bg-card/80 backdrop-blur-sm">
       <div className="container mx-auto max-w-7xl px-4 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="group flex items-center gap-2">

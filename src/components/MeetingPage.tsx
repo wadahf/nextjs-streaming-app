@@ -35,10 +35,12 @@ export default function MeetingPage({ id }: MeetingPageProps) {
   }
 
   return (
-    <StreamCall call={call}>
-      <StreamTheme>
-        <MeetingScreen />
-      </StreamTheme>
-    </StreamCall>
+    <div className="mx-auto max-w-2xl py-6">
+      <StreamCall call={call}>
+        <StreamTheme>
+          <MeetingScreen />
+        </StreamTheme>
+      </StreamCall>
+    </div>
   );
 }

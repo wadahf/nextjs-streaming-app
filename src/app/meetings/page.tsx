@@ -86,12 +86,7 @@ const MeetingsPage = () => {
   // }
 
   return (
-    // <div className="min-h-screen bg-background">
     <div>
-      {!calls && <Loader2 className="mx-auto animate-spin" />}
-      {/* {calls?.length === 0 && <p>No Meetings found</p>} */}
-      {calls && calls?.length === 0 && <p>No Meetings found</p>}
-
       <main className="container mx-auto px-4 py-12">
         <div className="mb-8">
           <h1 className="mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-4xl font-bold text-transparent">
@@ -102,85 +97,91 @@ const MeetingsPage = () => {
           </p>
         </div>
 
+        {!calls && <Loader2 className="mx-auto animate-spin" />}
+        {/* {calls?.length === 0 && <p>No Meetings found</p>} */}
+        {calls && calls?.length === 0 && <p>No Meetings found</p>}
+
         <div className="space-y-6">
           <div>
-            <h2 className="mb-4 text-2xl font-semibold">Upcoming</h2>
+            {/* <h2 className="mb-4 text-2xl font-semibold">Upcoming</h2> */}
             <div className="grid gap-4 md:grid-cols-2">
-              {calls?.map((call) => {
-                const meetingLink = `/meeting/${call.id}`;
-                const isCallNotStartedYet =
-                  call.state.startsAt &&
-                  new Date(call.state.startsAt) > new Date();
+              {calls
+                ?.filter((c) => !c.state.endedAt)
+                .map((call) => {
+                  const meetingLink = `/meeting/${call.id}`;
+                  const isCallNotStartedYet =
+                    call.state.startsAt &&
+                    new Date(call.state.startsAt) > new Date();
 
-                const isCallHasEnded = !!call.state.endedAt;
+                  const isCallHasEnded = !!call.state.endedAt;
 
-                const meetingState = isCallNotStartedYet
-                  ? "Upcoming"
-                  : isCallHasEnded
-                    ? "Ended"
-                    : call.state.callingState[0].toUpperCase() +
-                      call.state.callingState.slice(1);
+                  const meetingState = isCallNotStartedYet
+                    ? "Upcoming"
+                    : isCallHasEnded
+                      ? "Ended"
+                      : call.state.callingState[0].toUpperCase() +
+                        call.state.callingState.slice(1);
 
-                return (
-                  <Card
-                    key={call.id}
-                    className="transition-shadow hover:shadow-[var(--shadow-elegant)]"
-                  >
-                    <CardHeader>
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="text-xl">
-                            {/* Meeting ID: {call.id} */}
-                          </CardTitle>
-                          <CardDescription className="mt-1">
-                            <div className="mt-2 flex items-center gap-4">
-                              <span className="flex items-center gap-1">
-                                <Calendar className="h-4 w-4" />
-                                {/* {meeting.date} */}
-                                {/* {call.state.startsAt?.toLocaleString()} */}
-                                {call.state.startsAt?.toLocaleDateString()}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Clock className="h-4 w-4" />
-                                {/* {meeting.time} */}
-                                {call.state.startsAt?.toLocaleTimeString()}
-                              </span>
-                            </div>
-                            {call.state.custom.description && (
-                              <p className="mt-2">
-                                {call.state.custom.description}
-                              </p>
-                            )}
-                          </CardDescription>
+                  return (
+                    <Card
+                      key={call.id}
+                      className="transition-shadow hover:shadow-[var(--shadow-elegant)]"
+                    >
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <CardTitle className="text-xl">
+                              {/* Meeting ID: {call.id} */}
+                            </CardTitle>
+                            <CardDescription className="mt-1">
+                              <div className="mt-2 flex items-center gap-4">
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="h-4 w-4" />
+                                  {/* {meeting.date} */}
+                                  {/* {call.state.startsAt?.toLocaleString()} */}
+                                  {call.state.startsAt?.toLocaleDateString()}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Clock className="h-4 w-4" />
+                                  {/* {meeting.time} */}
+                                  {call.state.startsAt?.toLocaleTimeString()}
+                                </span>
+                              </div>
+                              {call.state.custom.description && (
+                                <p className="mt-2">
+                                  {call.state.custom.description}
+                                </p>
+                              )}
+                            </CardDescription>
+                          </div>
+                          {/* <Badge className="bg-accent text-accent-foreground"> */}
+                          <Badge className="bg-accent text-secondary">
+                            {meetingState}
+                          </Badge>
                         </div>
-                        {/* <Badge className="bg-accent text-accent-foreground"> */}
-                        <Badge className="bg-accent text-secondary">
-                          {meetingState}
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Users className="h-4 w-4" />
-                            {/* {meeting.participants} participants */}
-                            {
-                              call.state.participantCount
-                            } participants
-                          </span>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Users className="h-4 w-4" />
+                              {/* {meeting.participants} participants */}
+                              {
+                                call.state.participantCount
+                              } participants
+                            </span>
 
-                          {/* <span>{meeting.duration}</span> */}
+                            {/* <span>{meeting.duration}</span> */}
+                          </div>
+                          <Button size="sm" variant="default">
+                            <Video className="h-4 w-4" />
+                            <Link href={meetingLink}>Join</Link>
+                          </Button>
                         </div>
-                        <Button size="sm" variant="default">
-                          <Video className="h-4 w-4" />
-                          <Link href={meetingLink}>Join</Link>
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               {/* {meetings
                 .filter((m) => m.status === "upcoming")
                 .map((meeting) => (
@@ -231,8 +232,92 @@ const MeetingsPage = () => {
                 ))} */}
             </div>
           </div>
-
           <div>
+            {calls?.filter((c) => !!c.state.endedAt) && (
+              <h2 className="mb-4 text-2xl font-semibold">Past Meetings</h2>
+            )}
+            <div className="grid gap-4 md:grid-cols-2">
+              {calls
+                ?.filter((c) => !!c.state.endedAt)
+                .map((call) => {
+                  const meetingLink = `/meeting/${call.id}`;
+                  const isCallNotStartedYet =
+                    call.state.startsAt &&
+                    new Date(call.state.startsAt) > new Date();
+
+                  const isCallHasEnded = !!call.state.endedAt;
+
+                  const meetingState = isCallNotStartedYet
+                    ? "Upcoming"
+                    : isCallHasEnded
+                      ? "Ended"
+                      : call.state.callingState[0].toUpperCase() +
+                        call.state.callingState.slice(1);
+
+                  return (
+                    <Card
+                      key={call.id}
+                      className="transition-shadow hover:shadow-[var(--shadow-elegant)]"
+                    >
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <CardTitle className="text-xl">
+                              {/* Meeting ID: {call.id} */}
+                            </CardTitle>
+                            <CardDescription className="mt-1">
+                              <div className="mt-2 flex items-center gap-4">
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="h-4 w-4" />
+                                  {/* {meeting.date} */}
+                                  {/* {call.state.startsAt?.toLocaleString()} */}
+                                  {call.state.startsAt?.toLocaleDateString()}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Clock className="h-4 w-4" />
+                                  {/* {meeting.time} */}
+                                  {call.state.startsAt?.toLocaleTimeString()}
+                                </span>
+                              </div>
+                              {call.state.custom.description && (
+                                <p className="mt-2">
+                                  {call.state.custom.description}
+                                </p>
+                              )}
+                            </CardDescription>
+                          </div>
+                          {/* <Badge className="bg-accent text-accent-foreground"> */}
+                          <Badge className="bg-accent text-secondary">
+                            {meetingState}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Users className="h-4 w-4" />
+                              {/* {meeting.participants} participants */}
+                              {
+                                call.state.participantCount
+                              } participants
+                            </span>
+
+                            {/* <span>{meeting.duration}</span> */}
+                          </div>
+                          <Button size="sm" variant="default">
+                            <Video className="h-4 w-4" />
+                            <Link href={meetingLink}>Join</Link>
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+            </div>
+          </div>
+
+          {/* <div>
             <h2 className="mb-4 text-2xl font-semibold">Past Meetings</h2>
             <div className="grid gap-4 md:grid-cols-2">
               {meetings
@@ -281,7 +366,7 @@ const MeetingsPage = () => {
                   </Card>
                 ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
     </div>
