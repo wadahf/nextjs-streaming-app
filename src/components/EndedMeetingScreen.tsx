@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { buttonClassName } from "./Button";
 import RecordingsList from "./RecordingsList";
+import { Button } from "@/components";
 
 const EndedMeetingScreen = () => {
   return (
@@ -10,9 +10,9 @@ const EndedMeetingScreen = () => {
         <h2 className="text-center text-xl font-bold">Recordings</h2>
         <RecordingsList />
       </div>
-      <Link href="/" className={buttonClassName}>
-        Go To Home Page
-      </Link>
+      <Button>
+        <Link href="/">Go To Home Page</Link>
+      </Button>
     </div>
   );
 };

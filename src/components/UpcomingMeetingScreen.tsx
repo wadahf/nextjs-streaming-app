@@ -2,7 +2,7 @@
 import useStreamCall from "@/hooks/useStreamCall";
 import Link from "next/link";
 import React from "react";
-import { buttonClassName } from "./Button";
+import { Button } from "@/components";
 
 const UpcomingMeetingScreen = () => {
   const call = useStreamCall();
@@ -21,9 +21,9 @@ const UpcomingMeetingScreen = () => {
           description: <span className="font-bold">{meetingDescription}</span>
         </p>
       )}
-      <Link href="/" className={buttonClassName}>
-        Go To Home Page
-      </Link>
+      <Button>
+        <Link href="/">Go To Home Page</Link>
+      </Button>
     </div>
   );
 };
