@@ -13,6 +13,8 @@ import DescriptionInput from "./DescriptionInput";
 import StartTimeInput from "./StartTimeInput";
 import Participants from "./Participants";
 import MeetingLink from "./MeetingLink";
+import MeetingItem from "./new/MeetingItem";
+import MeetingsList from "./new/MeetingsList";
 
 export {
   DescriptionInput,
@@ -23,4 +25,6 @@ export {
   Featured,
   Hero,
   CTA,
+  MeetingItem,
+  MeetingsList,
 };

@@ -1,4 +1,5 @@
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+"use client";
+import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
 import heroImage from "@/assets/hero-meeting.jpg";
 import { Calendar, Play } from "lucide-react";
 import Image from "next/image";
@@ -6,21 +7,34 @@ import Link from "next/link";
 import { Button } from "./";
 
 const Hero = () => {
+  const { user } = useUser();
+
+  console.log(user);
   return (
     <section className="container mx-auto px-4 py-20">
       <div className="grid items-center gap-12 lg:grid-cols-2">
-        <div className="space-y-6">
-          <h1 className="text-5xl font-bold leading-tight lg:text-6xl">
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Connect Teams
-            </span>
-            <br />
-            Anywhere, Anytime
-          </h1>
+        <div className="h-[300px] space-y-6">
+          {user ? (
+            <h1 className="text-5xl font-bold leading-tight lg:text-6xl">
+              Welcome{" "}
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                {user.firstName}
+              </span>
+            </h1>
+          ) : (
+            <h1 className="text-5xl font-bold leading-tight lg:text-6xl">
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Connect Teams
+              </span>
+              <br />
+              Anywhere, Anytime
+            </h1>
+          )}
           <p className="text-xl text-muted-foreground">
             Professional video meetings made simple. Host secure video calls,
             collaborate in real-time, and stay connected with your team.
           </p>
+
           <SignedIn>
             <div className="flex gap-4">
               <Button asChild variant="hero" size="lg">
